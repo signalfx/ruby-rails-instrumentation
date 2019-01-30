@@ -1,0 +1,34 @@
+
+AllCops:
+    Exclude:
+        - 'test/**/*'
+        - 'gemfiles/**/*'
+        - 'bin/**/*'
+
+Style/Documentation:
+    Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+    Enabled: false
+
+Metrics/MethodLength:
+    Enabled: false
+
+Metrics/BlockLength:
+    Enabled: false
+
+Metrics/AbcSize:
+    Enabled: false
+
+RSpec/MultipleExpectations:
+    Enabled: false
+
+RSpec/ExampleLength:
+    Enabled: false
+
+RSpec/FilePath:
+    Enabled: false
+
+Metrics/LineLength:
+    Max: 100
+

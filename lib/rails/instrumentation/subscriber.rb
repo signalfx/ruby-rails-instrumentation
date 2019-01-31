@@ -12,7 +12,7 @@ module Rails
             ::Rails::Instrumentation.trace_notification(args, tag_list)
           end
 
-          subscribers << subscribers
+          subscribers << subscriber
         end # event_list.each
 
         subscribers

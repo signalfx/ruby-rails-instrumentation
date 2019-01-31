@@ -1,6 +1,14 @@
 require 'rails/instrumentation/version'
+require 'rails/instrumentation/subscriber'
+require 'rails/instrumentation/subscribers/action_controller_subscriber'
+require 'rails/instrumentation/subscribers/action_view_subscriber'
+require 'rails/instrumentation/subscribers/active_record_subscriber'
 
-require 'rails/instrumentation/action_controller_subscriber'
+require 'opentracing'
+# require_relative 'instrumentation/subscriber'
+# require_relative 'instrumentation/action_controller_subscriber'
+# require_relative 'instrumentation/action_view_subscriber'
+# require_relative 'instrumentation/active_record_subscriber'
 
 module Rails
   module Instrumentation
@@ -21,10 +29,15 @@ module Rails
 
       def add_subscribers
         ActionControllerSubscriber.subscribe
+        ActionViewSubscriber.subscribe
+        ActiveRecordSubscriber.subscribe
       end
 
-      def trace_event(event)
-        puts event
+      def trace_notification(event, tag_list = nil)
+        puts event[0], event[1], event[2], event[3]
+        event = ::ActiveSupport::Notifications::Event.new(*event)
+        span = @tracer.start_span(event.name.to_s, start_time: event.time)
+        span.finish(end_time: event.end)
       end
     end
   end

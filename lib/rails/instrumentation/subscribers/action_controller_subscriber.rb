@@ -2,6 +2,8 @@
 module Rails
   module Instrumentation
     module ActionControllerSubscriber
+      include Subscriber
+
       EVENT_NAMESPACE = 'action_controller'.freeze
 
       EVENTS = %w[
@@ -21,19 +23,6 @@ module Rails
       ].freeze
 
       class << self
-
-        def subscribe(exclude_list: [])
-          @subscribers = []
-
-          EVENTS.each do |event_name|
-            full_name = "#{event_name}.#{EVENT_NAMESPACE}"
-
-            @subscribers << Utils.register_subscriber(full_name: full_name,
-                                                      event_name: event_name,
-                                                      handler_module: self)
-          end
-        end
-
         def write_fragment(event)
           tags = {
             'key.write' => event.payload[:key]

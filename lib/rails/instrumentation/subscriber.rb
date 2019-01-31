@@ -1,26 +1,22 @@
-require 'active_support'
 
 module Rails
   module Instrumentation
     module Subscriber
+      def self.included(base)
+        base.extend ClassMethods
+      end
 
-      def self.subscribe_list(event_list, event_namespace, tag_list)
-        subscribers = []
+      module ClassMethods
+        def subscribe(exclude_list: [])
+          @subscribers = []
 
-        event_list.each do |event|
-          subscriber = ::ActiveSupport::Notifications.subscribe("#{event}.#{event_namespace}") do |*args|
-            ::Rails::Instrumentation.trace_notification(args, tag_list: tag_list)
+          self::EVENTS.each do |event_name|
+            full_name = "#{event_name}.#{self::EVENT_NAMESPACE}"
+
+            @subscribers << Utils.register_subscriber(full_name: full_name,
+                                                      event_name: event_name,
+                                                      handler_module: self)
           end
-
-          subscribers << subscriber
-        end # event_list.each
-
-        subscribers
-      end # subscribe
-
-      def self.subscribe(event_name, payload_tags)
-        ::ActiveSupport::Notifications.subscribe(event_name) do |*args|
-          ::Rails::Instrumentation.trace_notification(args, payload_tags: payload_tags)
         end
       end
     end

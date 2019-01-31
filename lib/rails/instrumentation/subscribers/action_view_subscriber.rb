@@ -2,6 +2,8 @@
 module Rails
   module Instrumentation
     module ActionViewSubscriber
+      include Subscriber
+
       EVENT_NAMESPACE = 'action_view'.freeze
 
       EVENTS = %w[
@@ -11,19 +13,6 @@ module Rails
       ]
 
       class << self
-
-        def subscribe(exclude_list: [])
-          @subscribers = []
-
-          EVENTS.each do |event_name|
-            full_name = "#{event_name}.#{EVENT_NAMESPACE}"
-
-            @subscribers << Utils.register_subscriber(full_name: full_name,
-                                                      event_name: event_name,
-                                                      handler_module: self)
-          end
-        end
-
         def render_template(event)
           tags = {
             'template.identifier' => event.payload[:identifier],

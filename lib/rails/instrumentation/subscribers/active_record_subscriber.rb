@@ -5,10 +5,14 @@ module Rails
     module ActiveRecordSubscriber
       EVENT_NAMESPACE = 'active_record'.freeze
 
-      EVENTS = %w[
-        sql
-        instantiation
-      ].freeze
+      EVENTS = {
+        'sql' => {
+
+        },
+        'instantiation' => {
+
+        }
+      }.freeze
 
       class << self
 

@@ -22,21 +22,30 @@ module Rails
         @tracer = tracer
         @subscriber_mutex = Mutex.new
 
-        @subscriber_mutex.synchronize do
-          add_subscribers
-        end
+        add_subscribers
       end
 
       def add_subscribers
-        ActionControllerSubscriber.subscribe
-        ActionViewSubscriber.subscribe
-        ActiveRecordSubscriber.subscribe
+        @subscriber_mutex.synchronize do
+          ActionControllerSubscriber.subscribe
+          ActionViewSubscriber.subscribe
+          # ActiveRecordSubscriber.subscribe
+        end
       end
 
-      def trace_notification(event, tag_list = nil)
-        puts event[0], event[1], event[2], event[3]
+      # this method takes an event payload and a hash of { :payload_identifier => 'opentracing.tag' }.
+      # These payload values will be tagged on the span with the matching tag name
+      def trace_notification(event, payload_tags: {})
         event = ::ActiveSupport::Notifications::Event.new(*event)
-        span = @tracer.start_span(event.name.to_s, start_time: event.time)
+        puts event.payload.keys
+
+        # build the tags from desired payload fields
+        tags = {}
+        payload_tags.each do |key, value|
+          tags[value] = event.payload.fetch(key, 'unknown').to_s
+        end
+
+        span = @tracer.start_span(event.name.to_s, tags: tags, start_time: event.time)
         span.finish(end_time: event.end)
       end
     end

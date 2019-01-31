@@ -1,72 +1,157 @@
-# require 'active_support'
 
 module Rails
   module Instrumentation
     module ActionControllerSubscriber
       EVENT_NAMESPACE = 'action_controller'.freeze
 
-      EVENTS = {
-        'write_fragment' => {
-          :key => 'key.write'
-        },
-        'read_fragment' => {
-          :key => 'key.read'
-        },
-        'expire_fragment' => {
-          :key => 'key.expire'
-        },
-        'exist_fragment?' => {
-          :key => 'key.exist_fragment?'
-        },
-        'write_page' => {
-          :path => 'path.write'
-        },
-        'expire_page' => {
-          :path => 'path.expire'
-        },
-        'start_processing' => {
-          :controller => 'controller',
-          :action => 'controller.action',
-          :params => 'request.params',
-          :format => 'request.format',
-          :method => 'http.method',
-          :path => 'http.url'
-        },
-        'process_action' => {
-          :controller => 'controller',
-          :action => 'controller.action',
-          :params => 'request.params',
-          :format => 'request.format',
-          :method => 'http.method',
-          :path => 'http.url',
-          :status => 'http.status_code',
-          :view_runtime => 'view.runtime.ms',
-          :db_runtime => 'db.runtime.ms'
-        },
-        'send_file' => {
-          :path => 'path.file'
-        },
-        'send_data' => {},
-        'redirect_to' => {
-          :status => 'http.status_code',
-          :location => 'redirect.url'
-        },
-        'halted_callback' => {
-          :filter => 'filter'
-        },
-        'unpermitted_parameters' => {
-          :keys => 'unpermitted_keys'
-        },
-      }.freeze
+      EVENTS = %w[
+        write_fragment
+        read_fragment
+        expire_fragment
+        exist_fragment?
+        write_page
+        expire_page
+        start_processing
+        process_action
+        send_file
+        send_data
+        redirect_to
+        halted_callback
+        unpermitted_parameters
+      ].freeze
 
       class << self
 
         def subscribe(exclude_list: [])
           @subscribers = []
-          EVENTS.each do |event, payload_tags|
-            event_name = "#{event}.#{EVENT_NAMESPACE}"
-            @subscribers << ::Rails::Instrumentation::Subscriber.subscribe(event_name, payload_tags)
+
+          EVENTS.each do |event_name|
+            full_name = "#{event_name}.#{EVENT_NAMESPACE}"
+
+            @subscribers << Utils.register_subscriber(full_name: full_name,
+                                                      event_name: event_name,
+                                                      handler_module: self)
           end
+        end
+
+        def write_fragment(event)
+          tags = {
+            'key.write' => event.payload[:key]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def read_fragment(event)
+          tags = {
+            'key.read' => event.payload[:key]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def expire_fragment(event)
+          tags = {
+            'key.expire' => event.payload[:key]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def exist_fragment?(event)
+          tags = {
+            'key.exist?' => event.payload[:key]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def write_page(event)
+          tags = {
+            'path.write' => event.payload[:path]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def expire_page(event)
+          tags = {
+            'path.expire' => event.payload[:path]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def start_processing(event)
+          tags = {
+            'controller' => event.payload[:controller],
+            'controller.action' => event.payload[:action],
+            'request.params' => event.payload[:params],
+            'request.format' => event.payload[:format],
+            'http.method' => event.payload[:method],
+            'http.url' => event.payload[:path]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def process_action(event)
+          tags = {
+            'controller' => event.payload[:controller],
+            'controller.action' => event.payload[:action],
+            'request.params' => event.payload[:params],
+            'request.format' => event.payload[:format],
+            'http.method' => event.payload[:method],
+            'http.url' => event.payload[:path],
+            'http.status_code' => event.payload[:status],
+            'view.runtime.ms' => event.payload[:view_runtime],
+            'db.runtime.ms' => event.payload[:db_runtime]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def send_file(event)
+          tags = {
+            'path.send' => event.payload[:path]
+          }
+
+          # there may be additional keys in the payload. It might be worth
+          # trying to tag them too
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def send_data(event)
+          # no defined keys, but user keys may be passed in. Might want to add
+          # them at some point
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def redirect_to(event)
+          tags = {
+            'http.status_code' => event.payload[:status],
+            'redirect.url' => event.payload[:location]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def halted_callback(event)
+          tags = {
+            'filter' => event.payload[:filter]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def unpermitted_parameters(event)
+          tags = {
+            'unpermitted_keys' => event.payload[:keys]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
         end
       end
     end

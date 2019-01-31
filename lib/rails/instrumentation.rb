@@ -28,7 +28,7 @@ module Rails
 
       def add_subscribers
         @subscriber_mutex.synchronize do
-          # ActionControllerSubscriber.subscribe
+          ActionControllerSubscriber.subscribe
           ActionViewSubscriber.subscribe
           # ActiveRecordSubscriber.subscribe
         end

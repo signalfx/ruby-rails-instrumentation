@@ -3,6 +3,7 @@ require 'rails/instrumentation/subscriber'
 require 'rails/instrumentation/subscribers/action_controller_subscriber'
 require 'rails/instrumentation/subscribers/action_view_subscriber'
 require 'rails/instrumentation/subscribers/active_record_subscriber'
+require 'rails/instrumentation/utils'
 
 require 'opentracing'
 # require_relative 'instrumentation/subscriber'
@@ -27,7 +28,7 @@ module Rails
 
       def add_subscribers
         @subscriber_mutex.synchronize do
-          ActionControllerSubscriber.subscribe
+          # ActionControllerSubscriber.subscribe
           ActionViewSubscriber.subscribe
           # ActiveRecordSubscriber.subscribe
         end

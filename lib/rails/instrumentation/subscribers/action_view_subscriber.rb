@@ -1,35 +1,54 @@
-# require 'active_support'
 
 module Rails
   module Instrumentation
     module ActionViewSubscriber
       EVENT_NAMESPACE = 'action_view'.freeze
 
-      # This hash contains the events and the payload items to be tagged for
-      # each event in this component.
-      EVENTS = {
-        'render_template' => {
-          :identifier => 'template.identifier',
-          :layout => 'template.layout'
-        }.freeze,
-        'render_partial' => {
-          :identifier => 'partial.identifier',
-        }.freeze,
-        'render_collection' => {
-          :identifier => 'collection.identifier',
-          :count => 'collection.count',
-          :cache_hits => 'collection.cache_hits'
-        }.freeze
-      }.freeze
+      EVENTS = %w[
+        render_template
+        render_partial
+        render_collection
+      ]
 
       class << self
 
         def subscribe(exclude_list: [])
           @subscribers = []
-          EVENTS.each do |event, payload_tags|
-            event_name = "#{event}.#{EVENT_NAMESPACE}"
-            @subscribers << ::Rails::Instrumentation::Subscriber.subscribe(event_name, payload_tags)
+
+          EVENTS.each do |event_name|
+            full_name = "#{event_name}.#{EVENT_NAMESPACE}"
+
+            @subscribers << Utils.register_subscriber(full_name: full_name,
+                                                      event_name: event_name,
+                                                      handler_module: self)
           end
+        end
+
+        def render_template(event)
+          tags = {
+            'template.identifier' => event.payload[:identifier],
+            'template.layout' => event.payload[:layout]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def render_partial(event)
+          tags = {
+            'partial.identifier' => event.payload[:identifier]
+          }
+
+          Utils.trace_notification(event: event, tags: tags)
+        end
+
+        def render_collection(event)
+          tags = {
+            'template.identifier' => event.payload[:identifier],
+            'template.count' => event.payload[:count]
+          }
+          tags['template.cache_hits'] = event.payload[:cache_hits] if event.payload.key? :cache_hits
+
+          Utils.trace_notification(event: event, tags: tags)
         end
       end
     end

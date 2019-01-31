@@ -30,7 +30,7 @@ module Rails
         @subscriber_mutex.synchronize do
           ActionControllerSubscriber.subscribe
           ActionViewSubscriber.subscribe
-          # ActiveRecordSubscriber.subscribe
+          ActiveRecordSubscriber.subscribe
         end
       end
 

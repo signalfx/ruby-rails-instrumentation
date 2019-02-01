@@ -8,3 +8,18 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+class TestSubscriber
+  include Rails::Instrumentation::Subscriber
+
+  EVENTS = [ 'test_event_1' ]
+  EVENT_NAMESPACE = 'test_subscriber'
+
+  def self.subscribers
+    @subscribers
+  end
+
+  def self.test_event_1(event)
+  end
+end
+

@@ -1,21 +1,28 @@
 require 'spec_helper'
 
 RSpec.describe Rails::Instrumentation::Subscriber do
+  let(:events) { TestSubscriber::EVENTS }
+  let(:event_namespace) { TestSubscriber::EVENT_NAMESPACE }
 
-  let(:tracer) { OpenTracingTestTracer.build }
-  let(:events) { %w[ test_event_1 test_event_2 test_event_3 ] }
-  let(:event_namespace) { 'subscriber_test' }
-  let(:tags) { %w[ status_code response errors ] }
-
-  describe 'Class Methods' do
-    it { is_expected.to respond_to :subscribe }
+  describe 'Class extended with Subscriber methods' do
+    it 'responds to :subscribe' do
+      expect(TestSubscriber).to respond_to :subscribe
+    end
   end
 
   describe 'subscribe' do
-    let(:subscribers) { described_class.subscribe(events, event_namespace, tags) }
-    
+    let(:subscribers) { TestSubscriber.subscribers }
+    before { TestSubscriber.subscribe }
+
+    after do
+      subscribers.each do |s|
+        ::ActiveSupport::Notifications.unsubscribe(s)
+      end
+    end
+
     it 'adds subscribers for each event' do
       expect(subscribers.count).to eq events.count
+      puts subscribers
 
       # verify that the listener registered for each event is actually the same
       # object as one in the subscribers list we got back
@@ -25,18 +32,6 @@ RSpec.describe Rails::Instrumentation::Subscriber do
 
         expect(subscribers).to include listener
       end
-    end
-
-    it 'passes the tags list to the trace_notification handler' do
-      allow(::Rails::Instrumentation).to receive(:trace_notification)
-
-      # pick one of the events and trigger it
-      ::ActiveSupport::Notifications.instrument("#{events[1]}.#{event_namespace}") do
-        # some work
-      end
-
-      # check that tag list is passed in
-      expect(::Rails::Instrumentation).to have_received(:trace_notification).with(anything, tags)
     end
   end
 end

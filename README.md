@@ -79,6 +79,17 @@ their span.
 | sql.active_record           | db.statement<br> name<br> connection_id<br> binds<br> cached |
 | instantiation.active_record | record.count<br> record.class                                |
 
+### Active Support
+
+| Event                          | Payload Tags                    |
+| ---                            | ---                             |
+| cache_read.active_support      | key<br> hit<br> super_operation |
+| cache_generate.active_support  | key                             |
+| cache_fetch_hit.active_support | key                             |
+| cache_write.active_support     | key                             |
+| cache_delete.active_support    | key                             |
+| cache_exist?.active_support    | key                             |
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

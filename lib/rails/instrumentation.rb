@@ -27,9 +27,9 @@ module Rails
 
     def self.add_subscribers(exclude_events: [])
       @subscriber_mutex.synchronize do
+        ActiveRecordSubscriber.subscribe(exclude_events: exclude_events)
         ActionControllerSubscriber.subscribe(exclude_events: exclude_events)
         ActionViewSubscriber.subscribe(exclude_events: exclude_events)
-        ActiveRecordSubscriber.subscribe(exclude_events: exclude_events)
       end
     end
     private_class_method :add_subscribers

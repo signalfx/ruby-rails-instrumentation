@@ -23,6 +23,8 @@ module Rails
                                                             tags: tags,
                                                             start_time: event.time)
 
+          # tag transaction_id
+          span.set_tag('transaction.id', event.transaction_id)
           tag_error(span, event.payload)
 
           span.finish(end_time: event.end)

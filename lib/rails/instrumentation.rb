@@ -11,24 +11,29 @@ module Rails
   module Instrumentation
     class Error < StandardError; end
 
-    class << self
+    attr_accessor :tracer
 
-      attr_accessor :tracer
+    def self.instrument(tracer: OpenTracing.global_tracer)
+      @tracer = tracer
+      @subscriber_mutex = Mutex.new
 
-      def instrument(tracer: OpenTracing.global_tracer)
-        @tracer = tracer
-        @subscriber_mutex = Mutex.new
+      add_subscribers
+    end
 
-        add_subscribers
-      end
-
-      def add_subscribers
-        @subscriber_mutex.synchronize do
-          ActionControllerSubscriber.subscribe
-          ActionViewSubscriber.subscribe
-          ActiveRecordSubscriber.subscribe
-        end
+    def self.add_subscribers
+      @subscriber_mutex.synchronize do
+        ActionControllerSubscriber.subscribe
+        ActionViewSubscriber.subscribe
+        ActiveRecordSubscriber.subscribe
       end
     end
+    private_class_method :add_subscribers
+
+    def self.clear_subscribers
+      @subscriber_mutex.synchronize do
+        # todo
+      end
+    end
+    private_class_method :clear_subscribers
   end
 end

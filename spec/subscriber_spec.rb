@@ -22,7 +22,6 @@ RSpec.describe Rails::Instrumentation::Subscriber do
 
     it 'adds subscribers for each event' do
       expect(subscribers.count).to eq events.count
-      puts subscribers
 
       # verify that the listener registered for each event is actually the same
       # object as one in the subscribers list we got back

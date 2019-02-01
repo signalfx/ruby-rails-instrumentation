@@ -38,14 +38,14 @@ Rails::Instrumentation.instrument(tracer: tracer,
     - Default: `OpenTracing.global_tracer`
 - `exclude_events`: Some events may be too noisy or they may simply not be
   necessary. These can be passed in as an array, and the instrumentation will
-  not subscribe to those events. The available events can be found below.
+  not subscribe to those events. The available events can be found in the [Instrumented Events](#instrumented-events) section.
     - Default: `[]`
     - Example: `['sql.active_record', 'read_fragment.action_controller']`
 
 ## Instrumented Events
 
 Events that have addition useful information in the payload will have additional
-tags on their span.
+tags on their span, as listed below.
 
 ### Action Controller
 

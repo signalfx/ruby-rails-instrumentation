@@ -7,7 +7,7 @@ module Rails
       end
 
       module ClassMethods
-        def subscribe(exclude_list: [])
+        def subscribe(exclude_events: [])
           @subscribers = []
 
           self::EVENTS.each do |event_name|
@@ -15,7 +15,7 @@ module Rails
 
             @subscribers << Utils.register_subscriber(full_name: full_name,
                                                       event_name: event_name,
-                                                      handler_module: self)
+                                                      handler_module: self) if !exclude_events.include? full_name
           end
         end
       end

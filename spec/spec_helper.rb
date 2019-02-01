@@ -12,7 +12,7 @@ end
 class TestSubscriber
   include Rails::Instrumentation::Subscriber
 
-  EVENTS = [ 'test_event_1' ]
+  EVENTS = %w[ test_event_1 test_event_2 test_event_3 ]
   EVENT_NAMESPACE = 'test_subscriber'
 
   def self.subscribers
@@ -20,6 +20,12 @@ class TestSubscriber
   end
 
   def self.test_event_1(event)
+  end
+
+  def self.test_event_2(event)
+  end
+
+  def self.test_event_3(event)
   end
 end
 

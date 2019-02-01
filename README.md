@@ -44,8 +44,8 @@ Rails::Instrumentation.instrument(tracer: tracer,
 
 ## Instrumented Events
 
-Events that have extra useful information in the payload will have extra tags on
-their span.
+Events that have addition useful information in the payload will have additional
+tags on their span.
 
 ### Action Controller
 

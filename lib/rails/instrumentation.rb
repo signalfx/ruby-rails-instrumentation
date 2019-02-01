@@ -3,6 +3,7 @@ require 'rails/instrumentation/subscriber'
 require 'rails/instrumentation/subscribers/action_controller_subscriber'
 require 'rails/instrumentation/subscribers/action_view_subscriber'
 require 'rails/instrumentation/subscribers/active_record_subscriber'
+require 'rails/instrumentation/subscribers/active_support_subscriber'
 require 'rails/instrumentation/utils'
 
 require 'opentracing'
@@ -30,6 +31,7 @@ module Rails
         ActiveRecordSubscriber.subscribe(exclude_events: exclude_events)
         ActionControllerSubscriber.subscribe(exclude_events: exclude_events)
         ActionViewSubscriber.subscribe(exclude_events: exclude_events)
+        ActiveSupportSubscriber.subscribe(exclude_events: exclude_events)
       end
     end
     private_class_method :add_subscribers

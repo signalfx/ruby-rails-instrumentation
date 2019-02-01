@@ -23,7 +23,22 @@ module Rails
                                                             tags: tags,
                                                             start_time: event.time)
 
+          tag_error(span, event.payload)
+
           span.finish(end_time: event.end)
+        end
+
+        # according to the ActiveSupport::Notifications documentation, exceptions
+        # will be indicated with the presence of the :exception and :exception_object
+        # keys. These will be tagged and logged according to the OpenTracing
+        # specification.
+        def tag_error(span, payload)
+          if payload.key? :exception
+            span.set_tag('error', true)
+            span.log_kv(key: 'error.kind', value: payload[:exception].first)
+            span.log_kv(key: 'message', value: payload[:exception].last)
+            span.log_kv(key: 'error.object', value: payload[:exception_object])
+          end
         end
       end
     end

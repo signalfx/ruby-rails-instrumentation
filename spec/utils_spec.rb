@@ -59,4 +59,38 @@ RSpec.describe Rails::Instrumentation::Utils do
       expect(tracer.spans.last.tags).to eq tags
     end
   end
+
+  describe 'tag_error' do
+    let(:tracer) { OpenTracingTestTracer.build }
+    let(:span) { tracer.start_span('test_span', tags: {}) }
+    let(:exception) { Exception.new('error_message') }
+    let(:payload) { {:exception => ['Exception', 'message'], :exception_object => exception} }
+
+    before { described_class.tag_error(span, payload) }
+
+    it 'adds error tags and logs to the span' do
+      expect(span.tags['error']).to be true
+
+      kind_log = {
+        :key => 'error.kind',
+        :value => 'Exception',
+        :timestamp => anything
+      }
+      expect(span.logs).to include kind_log
+
+      message_log = {
+        :key => 'message',
+        :value => 'message',
+        :timestamp => anything
+      }
+      expect(span.logs).to include message_log
+
+      object_log = {
+        :key => 'error.object',
+        :value => exception,
+        :timestamp => anything
+      }
+      expect(span.logs).to include object_log
+    end
+  end
 end

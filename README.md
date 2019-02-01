@@ -1,8 +1,10 @@
 # Rails::Instrumentation
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rails/instrumentation`. To experiment with that code, run `bin/console` for an interactive prompt.
+Instrumentation for Rails using ActiveSupport notifications.
 
-TODO: Delete this and the text above, and describe your gem
+## Supported versions
+
+- Rails 5.2.x, 5.1.x, 5.0.x, 4.2.x
 
 ## Installation
 
@@ -22,7 +24,60 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'rails/instrumentation'
+
+tracer_impl = SomeTracerImplementation.new
+
+Rails::Instrumentation.instrument(tracer: tracer,
+                                  exclude_events: [])
+```
+
+`instrument` takes these optional named arguments:
+- `tracer`: OpenTracing tracer to be used for this instrumentation
+    - Default: `OpenTracing.global_tracer`
+- `exclude_events`: Some events may be too noisy or they may simply not be
+  necessary. These can be passed in as an array, and the instrumentation will
+  not subscribe to those events. The available events can be found below.
+    - Default: `[]`
+    - Example: `['sql.active_record', 'read_fragment.action_controller']`
+
+## Instrumented Events
+
+Events that have extra useful information in the payload will have extra tags on
+their span.
+
+### Action Controller
+
+| Event                                    | Payload Tags                                                                                                                                                   |
+| ---                                      | ---                                                                                                                                                            |
+| write_fragment.action_controller         | key.write                                                                                                                                                      |
+| read_fragment.action_controller          | key.read                                                                                                                                                       |
+| expire_fragment.action_controller        | key.expire                                                                                                                                                     |
+| exist_fragment?.action_controller        | key.exist?                                                                                                                                                     |
+| write_page.action_controller             | path.write                                                                                                                                                     |
+| expire_page.action_controller            | path.expire                                                                                                                                                    |
+| start_processing.action_controller       | controller<br> controller.action<br> request.params<br> request.format<br> http.method<br> http.url                                                            |
+| process_action.action_controller         | controller<br> controller.action<br> request.params<br> request.format<br> http.method<br> http.url<br> http.status_code<br> view.runtime_ms<br> db.runtime_ms |
+| send_file.action_controller              | path.send                                                                                                                                                      |
+| send_data.action_controller              |                                                                                                                                                                |
+| redirect_to.action_controller            | http.status_code<br> redirect.url                                                                                                                              |
+| halted_callback.action_controller        | filter                                                                                                                                                         |
+| unpermitted_parameters.action_controller | unpermitted_keys                                                                                                                                               |
+### Action View
+
+| Event                         | Payload Tags                                                   |
+| ---                           | ---                                                            |
+| render_tempate.action_view    | template.identifier<br> template.layout                        |
+| render_partial.action_view    | partial.identifier                                             |
+| render_collection.action_view | template.identifier<br> template.count<br> template.cache_hits |
+
+### Active Record
+
+| Event                       | Payload Tags                                                 |
+| ---                         | ---                                                          |
+| sql.active_record           | db.statement<br> name<br> connection_id<br> binds<br> cached |
+| instantiation.active_record | record.count<br> record.class                                |
 
 ## Development
 

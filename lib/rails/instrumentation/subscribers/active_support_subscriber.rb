@@ -2,6 +2,8 @@
 module Rails
   module Instrumentation
     module ActiveSupportSubscriber
+      include Subscriber
+
       EVENT_NAMESPACE = 'active_support'.freeze
 
       EVENTS = %w[

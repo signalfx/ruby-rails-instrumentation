@@ -56,7 +56,7 @@ RSpec.describe Rails::Instrumentation::Utils do
 
     it 'adds a span with tags' do
       expect(tracer.spans.count).to eq 1
-      expect(tracer.spans.last.tags).to eq tags
+      expect(tracer.spans.last.tags).to eq tags.merge('transaction.id' => 0)
     end
   end
 

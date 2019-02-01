@@ -13,18 +13,23 @@ module Rails
 
     attr_accessor :tracer
 
-    def self.instrument(tracer: OpenTracing.global_tracer)
+    def self.instrument(tracer: OpenTracing.global_tracer,
+                        exclude_events: [])
       @tracer = tracer
       @subscriber_mutex = Mutex.new
 
-      add_subscribers
+      add_subscribers(exclude_events: exclude_events)
     end
 
-    def self.add_subscribers
+    def self.tracer
+      @tracer
+    end
+
+    def self.add_subscribers(exclude_events: [])
       @subscriber_mutex.synchronize do
-        ActionControllerSubscriber.subscribe
-        ActionViewSubscriber.subscribe
-        ActiveRecordSubscriber.subscribe
+        ActionControllerSubscriber.subscribe(exclude_events: exclude_events)
+        ActionViewSubscriber.subscribe(exclude_events: exclude_events)
+        ActiveRecordSubscriber.subscribe(exclude_events: exclude_events)
       end
     end
     private_class_method :add_subscribers

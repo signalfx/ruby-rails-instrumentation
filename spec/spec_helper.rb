@@ -15,6 +15,13 @@ def test_class_events(subscriber_class)
   end
 end
 
+def check_span(expected_keys, span)
+  span_tags = span.tags
+  expected_keys.each do |key|
+    expect(span_tags).to have_key(key)
+  end
+end
+
 class TestSubscriber
   include Rails::Instrumentation::Subscriber
 

@@ -27,7 +27,7 @@ module Rails
 
         def instantiation(event)
           tags = {
-            'record.count' => event.payload[:sql],
+            'record.count' => event.payload[:record_count],
             'record.class' => event.payload[:class_name]
           }
 

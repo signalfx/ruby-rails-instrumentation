@@ -20,7 +20,7 @@ module Rails
             'job' => event.payload[:job]
           }
 
-          Utils.trace_notifications(event: event, tags:tags)
+          Utils.trace_notification(event: event, tags:tags)
         end
 
         def enqueue(event)
@@ -29,7 +29,7 @@ module Rails
             'job' => event.payload[:job]
           }
 
-          Utils.trace_notifications(event: event, tags:tags)
+          Utils.trace_notification(event: event, tags:tags)
         end
 
         def perform_start(event)
@@ -38,7 +38,7 @@ module Rails
             'job' => event.payload[:job]
           }
 
-          Utils.trace_notifications(event: event, tags:tags)
+          Utils.trace_notification(event: event, tags:tags)
         end
 
         def perform(event)
@@ -47,7 +47,7 @@ module Rails
             'job' => event.payload[:job]
           }
 
-          Utils.trace_notifications(event: event, tags:tags)
+          Utils.trace_notification(event: event, tags:tags)
         end
       end
     end

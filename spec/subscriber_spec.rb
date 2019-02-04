@@ -45,4 +45,16 @@ RSpec.describe Rails::Instrumentation::Subscriber do
       expect(subscribers.first).to eq listener
     end
   end
+
+  describe 'unsubscribe' do
+    before { TestSubscriber.subscribe }
+
+    it 'unsubscribes all existing subscribers' do
+      subscribers = TestSubscriber.subscribers
+
+      expect(subscribers.count).to eq events.count
+
+      TestSubscriber.unsubscribe
+    end
+  end
 end

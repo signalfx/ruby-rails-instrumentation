@@ -46,7 +46,14 @@ module Rails
 
     def self.clear_subscribers
       @subscriber_mutex.synchronize do
-        # todo
+        ActiveRecordSubscriber.unsubscribe
+        ActionControllerSubscriber.unsubscribe
+        ActionViewSubscriber.unsubscribe
+        ActiveSupportSubscriber.unsubscribe
+        ActionMailerSubscriber.unsubscribe
+        ActiveJobSubscriber.unsubscribe
+        ActionCableSubscriber.unsubscribe
+        ActiveStorageSubscriber.unsubscribe
       end
     end
     private_class_method :clear_subscribers

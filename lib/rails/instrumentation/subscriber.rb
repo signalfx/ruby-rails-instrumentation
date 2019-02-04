@@ -19,6 +19,12 @@ module Rails
                                                       handler_module: self)
           end
         end
+
+        def unsubscribe
+          @subscribers.each do |subscriber|
+            ::ActiveSupport::Notifications.unsubscribe(subscriber)
+          end
+        end
       end
     end
   end

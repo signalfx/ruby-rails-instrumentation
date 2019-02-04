@@ -16,7 +16,10 @@ module Rails
   module Instrumentation
     class Error < StandardError; end
 
-    attr_accessor :tracer
+    TAGS = {
+      'component' => 'ruby-rails',
+      'instrumentation.version' => Rails::Instrumentation::VERSION
+    }.freeze
 
     def self.instrument(tracer: OpenTracing.global_tracer,
                         exclude_events: [])

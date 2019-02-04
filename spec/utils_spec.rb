@@ -4,7 +4,7 @@ RSpec.describe Rails::Instrumentation::Utils do
   let(:name) { TestSubscriber::EVENTS.first }
   let(:namespace) { TestSubscriber::EVENT_NAMESPACE }
   let(:full_name) { "#{name}.#{namespace}" }
-  let(:tags) { { 'status_code' => 200, 'response' => 'success', 'errors' => 0 } }
+  let(:tags) { { 'status_code' => 200, 'response' => 'success', 'errors' => 0, 'component' => 'ruby-rails', 'instrumentation.version' => ::Rails::Instrumentation::VERSION } }
 
   describe 'Class Methods' do
     it { is_expected.to respond_to :register_subscriber }

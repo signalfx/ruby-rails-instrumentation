@@ -9,6 +9,12 @@ RSpec.configure do |config|
   end
 end
 
+def test_class_events(subscriber_class)
+  subscriber_class::EVENTS.each do |event|
+    expect(subscriber_class).to respond_to event
+  end
+end
+
 class TestSubscriber
   include Rails::Instrumentation::Subscriber
 

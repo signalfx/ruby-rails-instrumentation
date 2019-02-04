@@ -4,6 +4,7 @@ require 'rails/instrumentation/subscribers/action_controller_subscriber'
 require 'rails/instrumentation/subscribers/action_view_subscriber'
 require 'rails/instrumentation/subscribers/active_record_subscriber'
 require 'rails/instrumentation/subscribers/active_support_subscriber'
+require 'rails/instrumentation/subscribers/action_mailer_subscriber'
 require 'rails/instrumentation/utils'
 
 require 'opentracing'

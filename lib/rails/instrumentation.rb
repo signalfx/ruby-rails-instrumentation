@@ -7,6 +7,7 @@ require 'rails/instrumentation/subscribers/active_support_subscriber'
 require 'rails/instrumentation/subscribers/action_mailer_subscriber'
 require 'rails/instrumentation/subscribers/active_job_subscriber'
 require 'rails/instrumentation/subscribers/action_cable_subscriber'
+require 'rails/instrumentation/subscribers/active_storage_subscriber'
 require 'rails/instrumentation/utils'
 
 require 'opentracing'

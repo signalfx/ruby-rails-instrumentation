@@ -1,4 +1,3 @@
-
 module Rails
   module Instrumentation
     module ActionViewSubscriber
@@ -10,7 +9,7 @@ module Rails
         render_template
         render_partial
         render_collection
-      ]
+      ].freeze
 
       class << self
         def render_template(event)

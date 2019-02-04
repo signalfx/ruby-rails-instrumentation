@@ -25,20 +25,16 @@ end
 class TestSubscriber
   include Rails::Instrumentation::Subscriber
 
-  EVENTS = %w[ test_event_1 test_event_2 test_event_3 ]
-  EVENT_NAMESPACE = 'test_subscriber'
+  EVENTS = %w[test_event_1 test_event_2 test_event_3].freeze
+  EVENT_NAMESPACE = 'test_subscriber'.freeze
 
-  def self.subscribers
-    @subscribers
+  class << self
+    attr_reader :subscribers
   end
 
-  def self.test_event_1(event)
-  end
+  def self.test_event_1(event); end
 
-  def self.test_event_2(event)
-  end
+  def self.test_event_2(event); end
 
-  def self.test_event_3(event)
-  end
+  def self.test_event_3(event); end
 end
-

@@ -12,52 +12,50 @@ RSpec.describe Rails::Instrumentation::ActiveJobSubscriber do
   end
 
   context 'when calling event method' do
-
     before { tracer.spans.clear }
 
     describe 'enqueue_at' do
-      let(:event) { ::ActiveSupport::Notifications::Event.new('enqueue_at.active_job', Time.now, Time.now, 0, {})}
+      let(:event) { ::ActiveSupport::Notifications::Event.new('enqueue_at.active_job', Time.now, Time.now, 0, {}) }
 
       it 'adds tags' do
         described_class.enqueue_at(event)
 
-        expected_keys = %w[ adapter job ]
+        expected_keys = %w[adapter job]
         check_span(expected_keys, tracer.spans.last)
       end
     end
 
     describe 'enqueue' do
-      let(:event) { ::ActiveSupport::Notifications::Event.new('enqueue.active_job', Time.now, Time.now, 0, {})}
+      let(:event) { ::ActiveSupport::Notifications::Event.new('enqueue.active_job', Time.now, Time.now, 0, {}) }
 
       it 'adds tags' do
         described_class.enqueue(event)
 
-        expected_keys = %w[ adapter job ]
+        expected_keys = %w[adapter job]
         check_span(expected_keys, tracer.spans.last)
       end
     end
 
     describe 'perform_start' do
-      let(:event) { ::ActiveSupport::Notifications::Event.new('perform_start.active_job', Time.now, Time.now, 0, {})}
+      let(:event) { ::ActiveSupport::Notifications::Event.new('perform_start.active_job', Time.now, Time.now, 0, {}) }
 
       it 'adds tags' do
         described_class.perform_start(event)
 
-        expected_keys = %w[ adapter job ]
+        expected_keys = %w[adapter job]
         check_span(expected_keys, tracer.spans.last)
       end
     end
 
     describe 'perform' do
-      let(:event) { ::ActiveSupport::Notifications::Event.new('perform.active_job', Time.now, Time.now, 0, {})}
+      let(:event) { ::ActiveSupport::Notifications::Event.new('perform.active_job', Time.now, Time.now, 0, {}) }
 
       it 'adds tags' do
         described_class.perform(event)
 
-        expected_keys = %w[ adapter job ]
+        expected_keys = %w[adapter job]
         check_span(expected_keys, tracer.spans.last)
       end
     end
-
   end
 end

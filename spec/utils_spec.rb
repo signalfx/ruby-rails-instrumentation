@@ -12,40 +12,35 @@ RSpec.describe Rails::Instrumentation::Utils do
   end
 
   describe 'register_subscriber' do
+    let(:handler) { spy(TestSubscriber) }
+    let!(:subscriber) { described_class.register_subscriber(full_name: full_name, event_name: name, handler_module: handler) }
 
-    before do
-      @subscriber = described_class.register_subscriber(full_name: full_name,
-                                                        event_name: name,
-                                                        handler_module: TestSubscriber)
-    end
-
-    after { ::ActiveSupport::Notifications.unsubscribe(@subscriber) }
+    after { ::ActiveSupport::Notifications.unsubscribe(subscriber) }
 
     it 'adds a subscriber for the event' do
-      expect(@subscriber).not_to be nil
+      expect(subscriber).not_to be nil
 
       # verify that the listener registered for the event is actually the same
       # object as the subscriber we got back
       listener = ::ActiveSupport::Notifications.notifier.listeners_for(full_name).first
 
-      expect(@subscriber).to eq listener
+      expect(subscriber).to eq listener
     end
 
     it 'calls the correct :event_name method in the handler' do
-      # it should call the method 'test_event_1' in the TestSubscriber
-      expect(TestSubscriber).to receive(name)
-
       # trigger the event
       ::ActiveSupport::Notifications.instrument(full_name) do
         # some work
       end
-    end
 
+      # it should call the method 'test_event_1' in the TestSubscriber
+      expect(handler).to have_received(name)
+    end
   end
 
   describe 'trace_notification' do
     let(:tracer) { OpenTracingTestTracer.build }
-    let(:event) { ::ActiveSupport::Notifications::Event.new(name, Time.now, Time.now, 0, {})}
+    let(:event) { ::ActiveSupport::Notifications::Event.new(name, Time.now, Time.now, 0, {}) }
 
     before do
       # allow the spans to be collected in our test tracer
@@ -64,7 +59,7 @@ RSpec.describe Rails::Instrumentation::Utils do
     let(:tracer) { OpenTracingTestTracer.build }
     let(:span) { tracer.start_span('test_span', tags: {}) }
     let(:exception) { Exception.new('error_message') }
-    let(:payload) { {:exception => ['Exception', 'message'], :exception_object => exception} }
+    let(:payload) { { exception: %w[Exception message], exception_object: exception } }
 
     before { described_class.tag_error(span, payload) }
 
@@ -72,23 +67,23 @@ RSpec.describe Rails::Instrumentation::Utils do
       expect(span.tags['error']).to be true
 
       kind_log = {
-        :key => 'error.kind',
-        :value => 'Exception',
-        :timestamp => anything
+        key: 'error.kind',
+        value: 'Exception',
+        timestamp: anything
       }
       expect(span.logs).to include kind_log
 
       message_log = {
-        :key => 'message',
-        :value => 'message',
-        :timestamp => anything
+        key: 'message',
+        value: 'message',
+        timestamp: anything
       }
       expect(span.logs).to include message_log
 
       object_log = {
-        :key => 'error.object',
-        :value => exception,
-        :timestamp => anything
+        key: 'error.object',
+        value: exception,
+        timestamp: anything
       }
       expect(span.logs).to include object_log
     end

@@ -1,4 +1,3 @@
-
 module Rails
   module Instrumentation
     module ActiveStorageSubscriber
@@ -82,7 +81,6 @@ module Rails
 
           Utils.trace_notification(event: event, tags: tags)
         end
-
       end
     end
   end

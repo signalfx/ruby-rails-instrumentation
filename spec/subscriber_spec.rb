@@ -35,10 +35,10 @@ RSpec.describe Rails::Instrumentation::Subscriber do
     end
 
     it 'doesn\'t create subscribers for events in the exclude list' do
-      exclude_events = [ 'test_event_1.test_subscriber', 'test_event_3.test_subscriber' ]
+      exclude_events = ['test_event_1.test_subscriber', 'test_event_3.test_subscriber']
       TestSubscriber.subscribe(exclude_events: exclude_events)
 
-      expect(subscribers.count).to eq (events.count - exclude_events.count)
+      expect(subscribers.count).to eq 1
 
       # there should only be a listener for 'test_event_2'
       listener = ::ActiveSupport::Notifications.notifier.listeners_for('test_event_2.test_subscriber').first

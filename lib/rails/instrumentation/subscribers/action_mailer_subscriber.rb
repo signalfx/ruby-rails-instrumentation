@@ -1,4 +1,3 @@
-
 module Rails
   module Instrumentation
     module ActionMailerSubscriber

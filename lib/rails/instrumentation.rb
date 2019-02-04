@@ -24,13 +24,8 @@ module Rails
     def self.instrument(tracer: OpenTracing.global_tracer,
                         exclude_events: [])
       @tracer = tracer
-      @subscriber_mutex = Mutex.new
 
       add_subscribers(exclude_events: exclude_events)
-    end
-
-    def self.uninstrument
-      clear_subscribers
     end
 
     def self.tracer
@@ -38,31 +33,26 @@ module Rails
     end
 
     def self.add_subscribers(exclude_events: [])
-      @subscriber_mutex.synchronize do
-        ActiveRecordSubscriber.subscribe(exclude_events: exclude_events)
-        ActionControllerSubscriber.subscribe(exclude_events: exclude_events)
-        ActionViewSubscriber.subscribe(exclude_events: exclude_events)
-        ActiveSupportSubscriber.subscribe(exclude_events: exclude_events)
-        ActionMailerSubscriber.subscribe(exclude_events: exclude_events)
-        ActiveJobSubscriber.subscribe(exclude_events: exclude_events)
-        ActionCableSubscriber.subscribe(exclude_events: exclude_events)
-        ActiveStorageSubscriber.subscribe(exclude_events: exclude_events)
-      end
+      ActiveRecordSubscriber.subscribe(exclude_events: exclude_events)
+      ActionControllerSubscriber.subscribe(exclude_events: exclude_events)
+      ActionViewSubscriber.subscribe(exclude_events: exclude_events)
+      ActiveSupportSubscriber.subscribe(exclude_events: exclude_events)
+      ActionMailerSubscriber.subscribe(exclude_events: exclude_events)
+      ActiveJobSubscriber.subscribe(exclude_events: exclude_events)
+      ActionCableSubscriber.subscribe(exclude_events: exclude_events)
+      ActiveStorageSubscriber.subscribe(exclude_events: exclude_events)
     end
     private_class_method :add_subscribers
 
-    def self.clear_subscribers
-      @subscriber_mutex.synchronize do
-        ActiveRecordSubscriber.unsubscribe
-        ActionControllerSubscriber.unsubscribe
-        ActionViewSubscriber.unsubscribe
-        ActiveSupportSubscriber.unsubscribe
-        ActionMailerSubscriber.unsubscribe
-        ActiveJobSubscriber.unsubscribe
-        ActionCableSubscriber.unsubscribe
-        ActiveStorageSubscriber.unsubscribe
-      end
+    def self.uninstrument
+      ActiveRecordSubscriber.unsubscribe
+      ActionControllerSubscriber.unsubscribe
+      ActionViewSubscriber.unsubscribe
+      ActiveSupportSubscriber.unsubscribe
+      ActionMailerSubscriber.unsubscribe
+      ActiveJobSubscriber.unsubscribe
+      ActionCableSubscriber.unsubscribe
+      ActiveStorageSubscriber.unsubscribe
     end
-    private_class_method :clear_subscribers
   end
 end

@@ -7,24 +7,32 @@ module Rails
 
       module ClassMethods
         def subscribe(exclude_events: [])
+          @subscriber_mutex = Mutex.new if @subscriber_mutex.nil?
+
+          # clear
+          unsubscribe
           @subscribers = []
 
-          self::EVENTS.each do |event_name|
-            full_name = "#{event_name}.#{self::EVENT_NAMESPACE}"
+          @subscriber_mutex.synchronize do
+            self::EVENTS.each do |event_name|
+              full_name = "#{event_name}.#{self::EVENT_NAMESPACE}"
 
-            next if exclude_events.include? full_name
+              next if exclude_events.include? full_name
 
-            @subscribers << Utils.register_subscriber(full_name: full_name,
-                                                      event_name: event_name,
-                                                      handler_module: self)
+              @subscribers << Utils.register_subscriber(full_name: full_name,
+                                                        event_name: event_name,
+                                                        handler_module: self)
+            end
           end
         end
 
         def unsubscribe
-          return if @subscribers.nil?
+          return if @subscribers.nil? || @subscriber_mutex.nil?
 
-          @subscribers.each do |subscriber|
-            ::ActiveSupport::Notifications.unsubscribe(subscriber)
+          @subscriber_mutex.synchronize do
+            @subscribers.each do |subscriber|
+              ::ActiveSupport::Notifications.unsubscribe(subscriber)
+            end
           end
         end
       end

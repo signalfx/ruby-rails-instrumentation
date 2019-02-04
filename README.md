@@ -43,6 +43,14 @@ Rails::Instrumentation.instrument(tracer: tracer,
     - Default: `[]`
     - Example: `['sql.active_record', 'read_fragment.action_controller']`
 
+All instrumentation can be removed:
+
+```ruby
+Rails::Instrumentation.uninstrument
+```
+
+This will clear all subscribers registered by this instrumentation.
+
 ## Instrumented Events
 
 Events that have addition useful information in the payload will have additional

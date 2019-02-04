@@ -29,6 +29,10 @@ module Rails
       add_subscribers(exclude_events: exclude_events)
     end
 
+    def self.uninstrument
+      clear_subscribers
+    end
+
     def self.tracer
       @tracer
     end

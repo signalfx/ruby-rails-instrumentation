@@ -21,6 +21,8 @@ module Rails
         end
 
         def unsubscribe
+          return if @subscribers.nil?
+
           @subscribers.each do |subscriber|
             ::ActiveSupport::Notifications.unsubscribe(subscriber)
           end

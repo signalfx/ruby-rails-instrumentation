@@ -1,6 +1,7 @@
 # Rails::Instrumentation
 
-Instrumentation for Rails using ActiveSupport notifications.
+OpenTracing instrumentation for Rails using ActiveSupport notifications. All events
+currently instrumented by ActiveSupport are available to trace.
 
 ## Supported versions
 
@@ -47,6 +48,9 @@ Rails::Instrumentation.instrument(tracer: tracer,
 Events that have addition useful information in the payload will have additional
 tags on their span, as listed below.
 
+For more information about each event, please look at the ActiveSupport
+notifications [documentation](https://guides.rubyonrails.org/active_support_instrumentation.html).
+
 ### Action Controller
 
 | Event                                    | Payload Tags                                                                                                                                                   |
@@ -79,6 +83,14 @@ tags on their span, as listed below.
 | sql.active_record           | db.statement<br> name<br> connection_id<br> binds<br> cached |
 | instantiation.active_record | record.count<br> record.class                                |
 
+### Action Mailer
+
+| Event                 | Payload Tags                                                                                                                               |
+| ---                   | ---                                                                                                                                        |
+| receive.action_mailer | mailer<br> message.id<br> message.subject<br> message.to<br> message.from<br> message.bcc<br> message.cc<br> message.date<br> message.body |
+| deliver.action_mailer | mailer<br> message.id<br> message.subject<br> message.to<br> message.from<br> message.bcc<br> message.cc<br> message.date<br> message.body |
+| process.action_mailer | mailer<br> action<br> args                                                                                                                 |
+
 ### Active Support
 
 | Event                          | Payload Tags                    |
@@ -89,6 +101,37 @@ tags on their span, as listed below.
 | cache_write.active_support     | key                             |
 | cache_delete.active_support    | key                             |
 | cache_exist?.active_support    | key                             |
+
+### Active Job
+
+| Event                    | Payload Tags    |
+| ---                      | ---             |
+| enqueue_at.active_job    | adapter<br> job |
+| enqueue.active_job       | adapter<br> job |
+| perform_start.active_job | adapter<br> job |
+| perform.active_job       | adapter<br> job |
+
+### Action Cable
+
+| Event                                           | Payload Tags                       |
+| ---                                             | ---                                |
+| perform_action.action_cable                     | channel_class<br> action<br> data  |
+| transmit.action_cable                           | channel_class<br> data<br> via     |
+| transmit_subscription_confirmation.action_cable | channel_class                      |
+| transmit_subscription_rejection.action_cable    | channel_class                      |
+| broadcast.action_cable                          | broadcasting<br> message<br> coder |
+
+### Active Storage
+
+| Event                                     | Payload Tags                 |
+| ---                                       | ---                          |
+| service_upload.active_storage             | key<br> service<br> checksum |
+| service_streaming_download.active_storage | key<br> service              |
+| service_download.active_storage           | key<br> service              |
+| service_delete.active_storage             | key<br> service              |
+| service_delete_prefixed.active_storage    | key.prefix<br> service       |
+| service_exist.active_storage              | key<br> service<br> exist    |
+| service_url.active_storage                | key<br> service<br> url      |
 
 ## Development
 

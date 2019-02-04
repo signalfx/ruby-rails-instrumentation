@@ -36,6 +36,10 @@ module Rails
         ActionControllerSubscriber.subscribe(exclude_events: exclude_events)
         ActionViewSubscriber.subscribe(exclude_events: exclude_events)
         ActiveSupportSubscriber.subscribe(exclude_events: exclude_events)
+        ActionMailerSubscriber.subscribe(exclude_events: exclude_events)
+        ActiveJobSubscriber.subscribe(exclude_events: exclude_events)
+        ActionCableSubscriber.subscribe(exclude_events: exclude_events)
+        ActiveStorageSubscriber.subscribe(exclude_events: exclude_events)
       end
     end
     private_class_method :add_subscribers

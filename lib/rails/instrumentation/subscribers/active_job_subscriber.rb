@@ -2,6 +2,8 @@
 module Rails
   module Instrumentation
     module ActiveJobSubscriber
+      include Subscriber
+
       EVENT_NAMESPACE = 'active_job'.freeze
 
       EVENTS = %w[

@@ -2,6 +2,8 @@
 module Rails
   module Instrumentation
     module ActionMailerSubscriber
+      include Subscriber
+
       EVENT_NAMESPACE = 'action_mailer'.freeze
 
       EVENTS = %w[

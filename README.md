@@ -61,7 +61,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Action Controller
 
-| Event                                    | Additional Tags                                                                                                                                                |
+| Event                                    | Span Tag Names                                                                                                                                                 |
 | ---                                      | ---                                                                                                                                                            |
 | write_fragment.action_controller         | key.write                                                                                                                                                      |
 | read_fragment.action_controller          | key.read                                                                                                                                                       |
@@ -78,7 +78,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 | unpermitted_parameters.action_controller | unpermitted_keys                                                                                                                                               |
 ### Action View
 
-| Event                         | Additional Tags                                                |
+| Event                         | Span Tag Names                                                 |
 | ---                           | ---                                                            |
 | render_tempate.action_view    | template.identifier<br> template.layout                        |
 | render_partial.action_view    | partial.identifier                                             |
@@ -86,14 +86,14 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Record
 
-| Event                       | Additional Tags                                                 |
+| Event                       | Span Tag Names                                               |
 | ---                         | ---                                                          |
 | sql.active_record           | db.statement<br> name<br> connection_id<br> binds<br> cached |
 | instantiation.active_record | record.count<br> record.class                                |
 
 ### Action Mailer
 
-| Event                 | Additional Tags                                                                                                                               |
+| Event                 | Span Tag Names                                                                                                                             |
 | ---                   | ---                                                                                                                                        |
 | receive.action_mailer | mailer<br> message.id<br> message.subject<br> message.to<br> message.from<br> message.bcc<br> message.cc<br> message.date<br> message.body |
 | deliver.action_mailer | mailer<br> message.id<br> message.subject<br> message.to<br> message.from<br> message.bcc<br> message.cc<br> message.date<br> message.body |
@@ -101,7 +101,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Support
 
-| Event                          | Additional Tags                    |
+| Event                          | Span Tag Names                  |
 | ---                            | ---                             |
 | cache_read.active_support      | key<br> hit<br> super_operation |
 | cache_generate.active_support  | key                             |
@@ -112,7 +112,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Job
 
-| Event                    | Additional Tags    |
+| Event                    | Span Tag Names  |
 | ---                      | ---             |
 | enqueue_at.active_job    | adapter<br> job |
 | enqueue.active_job       | adapter<br> job |
@@ -121,7 +121,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Action Cable
 
-| Event                                           | Additional Tags                       |
+| Event                                           | Span Tag Names                     |
 | ---                                             | ---                                |
 | perform_action.action_cable                     | channel_class<br> action<br> data  |
 | transmit.action_cable                           | channel_class<br> data<br> via     |
@@ -131,7 +131,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Storage
 
-| Event                                     | Additional Tags                 |
+| Event                                     | Span Tag Names               |
 | ---                                       | ---                          |
 | service_upload.active_storage             | key<br> service<br> checksum |
 | service_streaming_download.active_storage | key<br> service              |

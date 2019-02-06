@@ -53,7 +53,7 @@ RSpec.describe Rails::Instrumentation::ActionControllerSubscriber do
       it 'adds tags' do
         described_class.exist_fragment?(event)
 
-        expected_keys = %w[key.exist?]
+        expected_keys = %w[key.exist]
         check_span(expected_keys, tracer.spans.last)
       end
     end

@@ -1,4 +1,5 @@
 require 'rails/instrumentation/version'
+require 'rails/instrumentation/patch'
 require 'rails/instrumentation/subscriber'
 require 'rails/instrumentation/subscribers/action_controller_subscriber'
 require 'rails/instrumentation/subscribers/action_view_subscriber'
@@ -26,6 +27,7 @@ module Rails
       @tracer = tracer
 
       add_subscribers(exclude_events: exclude_events)
+      Patch.patch_process_action
     end
 
     def self.tracer

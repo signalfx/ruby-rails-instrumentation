@@ -84,6 +84,11 @@ module Rails
         end
 
         def process_action(event)
+          span_name = "#{event.payload[:action]}.#{event.payload[:controller]}"
+
+          # Only append these tags onto the span created by the patched 'process_action'
+          return unless ::Rails::Instrumentation.tracer.active_span.operation_name == span_name
+
           tags = {
             'controller' => event.payload[:controller],
             'controller.action' => event.payload[:action],
@@ -96,7 +101,9 @@ module Rails
             'db.runtime.ms' => event.payload[:db_runtime]
           }
 
-          Utils.trace_notification(event: event, tags: tags)
+          tags.each do |key, value|
+            ::Rails::Instrumentation.tracer.active_span.set_tag(key, value)
+          end
         end
 
         def send_file(event)

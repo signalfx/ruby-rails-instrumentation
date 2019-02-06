@@ -86,9 +86,6 @@ module Rails
         def process_action(event)
           span_name = "#{event.payload[:action]}.#{event.payload[:controller]}"
 
-          # Only append these tags onto the span created by the patched 'process_action'
-          return unless ::Rails::Instrumentation.tracer.active_span.operation_name == span_name
-
           tags = {
             'controller' => event.payload[:controller],
             'controller.action' => event.payload[:action],
@@ -101,8 +98,15 @@ module Rails
             'db.runtime.ms' => event.payload[:db_runtime]
           }
 
-          tags.each do |key, value|
-            ::Rails::Instrumentation.tracer.active_span.set_tag(key, value)
+          # Only append these tags onto the active span created by the patched 'process_action'
+          # Otherwise, create a new span for this notification as usual
+          active_span = ::Rails::Instrumentation.tracer.active_span
+          if active_span && active_span.operation_name == span_name
+            tags.each do |key, value|
+              ::Rails::Instrumentation.tracer.active_span.set_tag(key, value)
+            end
+          else
+            Utils.trace_notification(event: event, tags: tags)
           end
         end
 

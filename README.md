@@ -53,7 +53,7 @@ This will clear all subscribers registered by this instrumentation.
 
 ## Instrumented Events
 
-Events that have addition useful information in the payload will have additional
+Events that have additional useful information in the payload will have additional
 tags on their span, as listed below.
 
 For more information about each event, please look at the ActiveSupport
@@ -61,12 +61,12 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Action Controller
 
-| Event                                    | Payload Tags                                                                                                                                                   |
+| Event                                    | Additional Tags                                                                                                                                                |
 | ---                                      | ---                                                                                                                                                            |
 | write_fragment.action_controller         | key.write                                                                                                                                                      |
 | read_fragment.action_controller          | key.read                                                                                                                                                       |
 | expire_fragment.action_controller        | key.expire                                                                                                                                                     |
-| exist_fragment?.action_controller        | key.exist?                                                                                                                                                     |
+| exist_fragment?.action_controller        | key.exist                                                                                                                                                      |
 | write_page.action_controller             | path.write                                                                                                                                                     |
 | expire_page.action_controller            | path.expire                                                                                                                                                    |
 | start_processing.action_controller       | controller<br> controller.action<br> request.params<br> request.format<br> http.method<br> http.url                                                            |
@@ -78,7 +78,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 | unpermitted_parameters.action_controller | unpermitted_keys                                                                                                                                               |
 ### Action View
 
-| Event                         | Payload Tags                                                   |
+| Event                         | Additional Tags                                                |
 | ---                           | ---                                                            |
 | render_tempate.action_view    | template.identifier<br> template.layout                        |
 | render_partial.action_view    | partial.identifier                                             |
@@ -86,14 +86,14 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Record
 
-| Event                       | Payload Tags                                                 |
+| Event                       | Additional Tags                                                 |
 | ---                         | ---                                                          |
 | sql.active_record           | db.statement<br> name<br> connection_id<br> binds<br> cached |
 | instantiation.active_record | record.count<br> record.class                                |
 
 ### Action Mailer
 
-| Event                 | Payload Tags                                                                                                                               |
+| Event                 | Additional Tags                                                                                                                               |
 | ---                   | ---                                                                                                                                        |
 | receive.action_mailer | mailer<br> message.id<br> message.subject<br> message.to<br> message.from<br> message.bcc<br> message.cc<br> message.date<br> message.body |
 | deliver.action_mailer | mailer<br> message.id<br> message.subject<br> message.to<br> message.from<br> message.bcc<br> message.cc<br> message.date<br> message.body |
@@ -101,7 +101,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Support
 
-| Event                          | Payload Tags                    |
+| Event                          | Additional Tags                    |
 | ---                            | ---                             |
 | cache_read.active_support      | key<br> hit<br> super_operation |
 | cache_generate.active_support  | key                             |
@@ -112,7 +112,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Job
 
-| Event                    | Payload Tags    |
+| Event                    | Additional Tags    |
 | ---                      | ---             |
 | enqueue_at.active_job    | adapter<br> job |
 | enqueue.active_job       | adapter<br> job |
@@ -121,7 +121,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Action Cable
 
-| Event                                           | Payload Tags                       |
+| Event                                           | Additional Tags                       |
 | ---                                             | ---                                |
 | perform_action.action_cable                     | channel_class<br> action<br> data  |
 | transmit.action_cable                           | channel_class<br> data<br> via     |
@@ -131,7 +131,7 @@ notifications [documentation](https://guides.rubyonrails.org/active_support_inst
 
 ### Active Storage
 
-| Event                                     | Payload Tags                 |
+| Event                                     | Additional Tags                 |
 | ---                                       | ---                          |
 | service_upload.active_storage             | key<br> service<br> checksum |
 | service_streaming_download.active_storage | key<br> service              |

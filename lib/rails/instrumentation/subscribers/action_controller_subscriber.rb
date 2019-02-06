@@ -48,7 +48,7 @@ module Rails
 
         def exist_fragment?(event)
           tags = {
-            'key.exist?' => event.payload[:key]
+            'key.exist' => event.payload[:key]
           }
 
           Utils.trace_notification(event: event, tags: tags)

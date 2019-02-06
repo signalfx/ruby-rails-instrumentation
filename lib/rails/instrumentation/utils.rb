@@ -26,7 +26,7 @@ module Rails
 
           # tag transaction_id
           span.set_tag('transaction.id', event.transaction_id)
-          tag_error(span, event.payload)
+          tag_error(span, event.payload) if event.payload.key? :exception
 
           span.finish(end_time: event.end)
         end
@@ -36,8 +36,6 @@ module Rails
         # keys. These will be tagged and logged according to the OpenTracing
         # specification.
         def tag_error(span, payload)
-          return unless payload.key? :exception
-
           span.set_tag('error', true)
           span.log_kv(key: 'error.kind', value: payload[:exception].first)
           span.log_kv(key: 'message', value: payload[:exception].last)

@@ -29,6 +29,14 @@ RSpec/ExampleLength:
 RSpec/FilePath:
     Enabled: false
 
+RSpec/VerifiedDoubles:
+    Enabled: false
+
+Metrics/ModuleLength:
+    Enabled: false
+
 Metrics/LineLength:
     Max: 100
+    Exclude:
+        - 'spec/**/*'
 

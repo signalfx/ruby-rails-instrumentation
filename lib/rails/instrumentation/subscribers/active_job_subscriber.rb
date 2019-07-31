@@ -12,39 +12,47 @@ module Rails
         perform
       ].freeze
 
+      # rubocop:disable Style/MutableConstant
+      BASE_TAGS = { 'component' => 'ActiveJob' }
+      # rubocop:enable Style/MutableConstant.
+
       class << self
         def enqueue_at(event)
-          tags = {
+          tags = Utils.merged_tags(
+            BASE_TAGS,
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
-          }
+          )
 
           Utils.trace_notification(event: event, tags: tags)
         end
 
         def enqueue(event)
-          tags = {
+          tags = Utils.merged_tags(
+            BASE_TAGS,
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
-          }
+          )
 
           Utils.trace_notification(event: event, tags: tags)
         end
 
         def perform_start(event)
-          tags = {
+          tags = Utils.merged_tags(
+            BASE_TAGS,
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
-          }
+          )
 
           Utils.trace_notification(event: event, tags: tags)
         end
 
         def perform(event)
-          tags = {
+          tags = Utils.merged_tags(
+            BASE_TAGS,
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
-          }
+          )
 
           Utils.trace_notification(event: event, tags: tags)
         end

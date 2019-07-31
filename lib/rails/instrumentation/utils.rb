@@ -18,7 +18,7 @@ module Rails
         # takes and event and some set of tags from a handler, and creates a
         # span with the event's name and the start and finish times.
         def trace_notification(event:, tags: [])
-          tags = tags.merge(::Rails::Instrumentation::TAGS)
+          tags = ::Rails::Instrumentation::TAGS.clone.merge(tags)
 
           span = ::Rails::Instrumentation.tracer.start_span(event.name,
                                                             tags: tags,
@@ -40,6 +40,12 @@ module Rails
           span.log_kv(key: 'error.kind', value: payload[:exception].first)
           span.log_kv(key: 'message', value: payload[:exception].last)
           span.log_kv(key: 'error.object', value: payload[:exception_object])
+        end
+
+        # takes a base_tags hash whose clone will be merged with provided
+        # additional tags.  All provided tag hashes will not be modified
+        def merged_tags(base_tags, tags)
+          base_tags.clone.merge(tags)
         end
       end
     end

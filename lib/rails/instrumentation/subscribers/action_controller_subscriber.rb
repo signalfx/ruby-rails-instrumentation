@@ -27,8 +27,7 @@ module Rails
 
       class << self
         def write_fragment(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key.write' => event.payload[:key]
           )
 
@@ -36,8 +35,7 @@ module Rails
         end
 
         def read_fragment(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key.read' => event.payload[:key]
           )
 
@@ -45,8 +43,7 @@ module Rails
         end
 
         def expire_fragment(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key.expire' => event.payload[:key]
           )
 
@@ -54,8 +51,7 @@ module Rails
         end
 
         def exist_fragment?(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key.exist' => event.payload[:key]
           )
 
@@ -63,8 +59,7 @@ module Rails
         end
 
         def write_page(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'path.write' => event.payload[:path]
           )
 
@@ -72,8 +67,7 @@ module Rails
         end
 
         def expire_page(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'path.expire' => event.payload[:path]
           )
 
@@ -81,8 +75,7 @@ module Rails
         end
 
         def start_processing(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'controller' => event.payload[:controller],
             'controller.action' => event.payload[:action],
             'request.params' => event.payload[:params],
@@ -95,10 +88,9 @@ module Rails
         end
 
         def process_action(event)
-          span_name = "#{event.payload[:action]}.#{event.payload[:controller]}"
+          span_name = "#{event.payload[:controller]}.#{event.payload[:action]}"
 
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'controller' => event.payload[:controller],
             'controller.action' => event.payload[:action],
             'request.params' => event.payload[:params],
@@ -124,8 +116,7 @@ module Rails
         end
 
         def send_file(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'path.send' => event.payload[:path]
           )
 
@@ -143,8 +134,7 @@ module Rails
         end
 
         def redirect_to(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'http.status_code' => event.payload[:status],
             'redirect.url' => event.payload[:location]
           )
@@ -153,8 +143,7 @@ module Rails
         end
 
         def halted_callback(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'filter' => event.payload[:filter]
           )
 
@@ -162,8 +151,7 @@ module Rails
         end
 
         def unpermitted_parameters(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'unpermitted_keys' => event.payload[:keys]
           )
 

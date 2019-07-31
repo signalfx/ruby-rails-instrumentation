@@ -18,8 +18,7 @@ module Rails
 
       class << self
         def enqueue_at(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
           )
@@ -28,8 +27,7 @@ module Rails
         end
 
         def enqueue(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
           )
@@ -38,8 +36,7 @@ module Rails
         end
 
         def perform_start(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
           )
@@ -48,8 +45,7 @@ module Rails
         end
 
         def perform(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'adapter' => event.payload[:adapter],
             'job' => event.payload[:job]
           )

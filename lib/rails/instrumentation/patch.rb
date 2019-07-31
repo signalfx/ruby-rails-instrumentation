@@ -6,9 +6,9 @@ module Rails
           alias_method :process_action_original, :process_action
 
           def process_action(method_name, *args)
-            # this naming scheme 'method.class' is how we ensure that the notification in the
+            # this naming scheme 'class.method' is how we ensure that the notification in the
             # subscriber is the same one
-            name = "#{method_name}.#{self.class.name}"
+            name = "#{self.class.name}.#{method_name}"
             scope = ::Rails::Instrumentation.tracer.start_active_span(name)
 
             # skip adding tags here. Getting the complete set of information is

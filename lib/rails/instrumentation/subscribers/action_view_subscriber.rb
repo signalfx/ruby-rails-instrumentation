@@ -17,8 +17,7 @@ module Rails
 
       class << self
         def render_template(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'template.identifier' => event.payload[:identifier],
             'template.layout' => event.payload[:layout]
           )
@@ -27,8 +26,7 @@ module Rails
         end
 
         def render_partial(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'partial.identifier' => event.payload[:identifier]
           )
 
@@ -36,8 +34,7 @@ module Rails
         end
 
         def render_collection(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'template.identifier' => event.payload[:identifier],
             'template.count' => event.payload[:count]
           )

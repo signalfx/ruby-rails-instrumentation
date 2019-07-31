@@ -35,6 +35,10 @@ module Rails
             end
           end
         end
+
+        def span_tags(tags)
+          self::BASE_TAGS.clone.merge(tags)
+        end
       end
     end
   end

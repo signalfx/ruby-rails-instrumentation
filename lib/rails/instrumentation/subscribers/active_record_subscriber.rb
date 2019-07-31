@@ -18,8 +18,7 @@ module Rails
 
       class << self
         def sql(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'db.statement' => event.payload[:sql],
             'name' => event.payload[:name],
             'connection_id' => event.payload[:connection_id],
@@ -31,8 +30,7 @@ module Rails
         end
 
         def instantiation(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'record.count' => event.payload[:record_count],
             'record.class' => event.payload[:class_name]
           )

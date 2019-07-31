@@ -21,8 +21,7 @@ module Rails
 
       class << self
         def service_upload(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'service' => event.payload[:service],
             'checksum' => event.payload[:checksum]
@@ -32,8 +31,7 @@ module Rails
         end
 
         def service_streaming_download(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'service' => event.payload[:service]
           )
@@ -42,8 +40,7 @@ module Rails
         end
 
         def service_download(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'service' => event.payload[:service]
           )
@@ -52,8 +49,7 @@ module Rails
         end
 
         def service_delete(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'service' => event.payload[:service]
           )
@@ -62,8 +58,7 @@ module Rails
         end
 
         def service_delete_prefixed(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key.prefix' => event.payload[:prefix],
             'service' => event.payload[:service]
           )
@@ -72,8 +67,7 @@ module Rails
         end
 
         def service_exist(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'service' => event.payload[:service],
             'exist' => event.payload[:exist]
@@ -83,8 +77,7 @@ module Rails
         end
 
         def service_url(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'service' => event.payload[:service],
             'url' => event.payload[:url] # generated url, not accessed url

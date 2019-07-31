@@ -20,8 +20,7 @@ module Rails
 
       class << self
         def cache_read(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key],
             'hit' => event.payload[:hit],
             'super_operation' => event.payload[:super_operation]
@@ -31,8 +30,7 @@ module Rails
         end
 
         def cache_generate(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key]
           )
 
@@ -40,8 +38,7 @@ module Rails
         end
 
         def cache_fetch_hit(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key]
           )
 
@@ -49,8 +46,7 @@ module Rails
         end
 
         def cache_write(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key]
           )
 
@@ -58,8 +54,7 @@ module Rails
         end
 
         def cache_delete(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key]
           )
 
@@ -67,8 +62,7 @@ module Rails
         end
 
         def cache_exist?(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'key' => event.payload[:key]
           )
 

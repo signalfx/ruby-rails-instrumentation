@@ -41,12 +41,6 @@ module Rails
           span.log_kv(key: 'message', value: payload[:exception].last)
           span.log_kv(key: 'error.object', value: payload[:exception_object])
         end
-
-        # takes a base_tags hash whose clone will be merged with provided
-        # additional tags.  All provided tag hashes will not be modified
-        def merged_tags(base_tags, tags)
-          base_tags.clone.merge(tags)
-        end
       end
     end
   end

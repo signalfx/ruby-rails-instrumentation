@@ -17,8 +17,7 @@ module Rails
 
       class << self
         def receive(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'mailer' => event.payload[:mailer],
             'message.id' => event.payload[:message_id],
             'message.subject' => event.payload[:subject],
@@ -34,8 +33,7 @@ module Rails
         end
 
         def deliver(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'mailer' => event.payload[:mailer],
             'message.id' => event.payload[:message_id],
             'message.subject' => event.payload[:subject],
@@ -51,8 +49,7 @@ module Rails
         end
 
         def process(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'mailer' => event.payload[:mailer],
             'action' => event.payload[:action],
             'args' => event.payload[:args]

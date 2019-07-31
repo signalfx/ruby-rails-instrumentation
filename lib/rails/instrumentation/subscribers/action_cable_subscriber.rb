@@ -19,8 +19,7 @@ module Rails
 
       class << self
         def perform_action(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'channel_class' => event.payload[:channel_class],
             'action' => event.payload[:action],
             'data' => event.payload[:data]
@@ -30,8 +29,7 @@ module Rails
         end
 
         def transmit(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'channel_class' => event.payload[:channel_class],
             'data' => event.payload[:data],
             'via' => event.payload[:via]
@@ -41,8 +39,7 @@ module Rails
         end
 
         def transmit_subscription_confirmation(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'channel_class' => event.payload[:channel_class]
           )
 
@@ -50,8 +47,7 @@ module Rails
         end
 
         def transmit_subscription_rejection(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'channel_class' => event.payload[:channel_class]
           )
 
@@ -59,8 +55,7 @@ module Rails
         end
 
         def broadcast(event)
-          tags = Utils.merged_tags(
-            BASE_TAGS,
+          tags = span_tags(
             'broadcasting' => event.payload[:broadcasting],
             'message' => event.payload[:message],
             'coder' => event.payload[:coder]

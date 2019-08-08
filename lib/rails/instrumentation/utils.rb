@@ -18,7 +18,7 @@ module Rails
         # takes and event and some set of tags from a handler, and creates a
         # span with the event's name and the start and finish times.
         def trace_notification(event:, tags: [])
-          tags = tags.merge(::Rails::Instrumentation::TAGS)
+          tags = ::Rails::Instrumentation::TAGS.clone.merge(tags)
 
           span = ::Rails::Instrumentation.tracer.start_span(event.name,
                                                             tags: tags,

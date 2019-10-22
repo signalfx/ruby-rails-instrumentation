@@ -18,8 +18,10 @@ module Rails
 
       class << self
         def sql(event)
+          raw = event.payload[:sql]
+          statement = raw.respond_to?(:to_str) ? raw : raw.to_s
           tags = span_tags(
-            'db.statement' => event.payload[:sql],
+            'db.statement' => statement[0, 1024],
             'name' => event.payload[:name],
             'connection_id' => event.payload[:connection_id],
             'binds' => event.payload[:binds],

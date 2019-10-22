@@ -15,13 +15,16 @@ RSpec.describe Rails::Instrumentation::ActiveRecordSubscriber do
     before { tracer.spans.clear }
 
     describe 'sql' do
-      let(:event) { ::ActiveSupport::Notifications::Event.new('sql.active_record', Time.now, Time.now, 0, {}) }
+      statement = 'SELECT' * 4096
+      let(:event) { ::ActiveSupport::Notifications::Event.new('sql.active_record', Time.now, Time.now, 0, sql: statement) }
 
       it 'adds tags' do
         described_class.sql(event)
 
         expected_keys = %w[db.statement name connection_id binds cached]
-        check_span(expected_keys, tracer.spans.last)
+        span = tracer.spans.last
+        check_span(expected_keys, span)
+        expect(span.tags['db.statement']).to eq(statement[0..1023])
       end
     end
 

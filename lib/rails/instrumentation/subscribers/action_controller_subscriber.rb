@@ -103,12 +103,21 @@ module Rails
             'span.kind' => 'server'
           )
 
+
+          status_code = event.payload[:status]
+          if status_code.is_a? Integer and status_code >= 500
+            tags['error'] = true
+          end
+
           # Only append these tags onto the active span created by the patched 'process_action'
           # Otherwise, create a new span for this notification as usual
           active_span = ::Rails::Instrumentation.tracer.active_span
           if active_span && active_span.operation_name == span_name
             tags.each do |key, value|
               ::Rails::Instrumentation.tracer.active_span.set_tag(key, value)
+            end
+            if event.payload.key? :exception
+              Utils.tag_error(active_span, event.payload)
             end
           else
             Utils.trace_notification(event: event, tags: tags)

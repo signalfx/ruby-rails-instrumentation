@@ -102,6 +102,27 @@ RSpec.describe Rails::Instrumentation::ActionControllerSubscriber do
       end
     end
 
+    describe 'process_action_exception' do
+      let(:event) { ::ActiveSupport::Notifications::Event.new('process_action.action_controller', Time.now, Time.now, 0, {:exception => ["ArgumentError", "Invalid value"]}) }
+
+      it 'adds tags' do
+        described_class.process_action(event)
+
+        expected_keys = %w[controller controller.action error request.params request.format http.method http.url http.status_code view.runtime.ms db.runtime.ms]
+        check_span(expected_keys, tracer.spans.last)
+      end
+    end
+
+    describe 'process_action_status_code' do
+      let(:event) { ::ActiveSupport::Notifications::Event.new('process_action.action_controller', Time.now, Time.now, 0, {:status => 503}) }
+
+      it 'adds tags' do
+        described_class.process_action(event)
+        expected_keys = %w[controller controller.action error request.params request.format http.method http.url http.status_code view.runtime.ms db.runtime.ms]
+        check_span(expected_keys, tracer.spans.last)
+      end
+    end
+
     describe 'send_file' do
       let(:event) { ::ActiveSupport::Notifications::Event.new('send_file.action_controller', Time.now, Time.now, 0, {}) }
 

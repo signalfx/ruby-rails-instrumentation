@@ -103,7 +103,7 @@ RSpec.describe Rails::Instrumentation::ActionControllerSubscriber do
     end
 
     describe 'process_action_exception' do
-      let(:event) { ::ActiveSupport::Notifications::Event.new('process_action.action_controller', Time.now, Time.now, 0, {:exception => ["ArgumentError", "Invalid value"]}) }
+      let(:event) { ::ActiveSupport::Notifications::Event.new('process_action.action_controller', Time.now, Time.now, 0, {:exception => ["ArgumentError", "Invalid value"], :exception_object => ArgumentError.new("Invalid value")}) }
 
       it 'adds tags' do
         described_class.process_action(event)

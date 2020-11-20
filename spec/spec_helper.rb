@@ -1,6 +1,6 @@
 require 'bundler/setup'
 require 'rails/instrumentation'
-require 'opentracing_test_tracer'
+require 'signalfx_test_tracer'
 # require 'rack/test'
 
 RSpec.configure do |config|

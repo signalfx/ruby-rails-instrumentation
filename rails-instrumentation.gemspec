@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rails/instrumentation/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'rails-instrumentation'
+  spec.name          = 'signalfx-rails-instrumentation'
   spec.version       = Rails::Instrumentation::VERSION
   spec.authors       = ['Ashwin Chandrasekar']
   spec.email         = ['achandrasekar@signalfx.com']

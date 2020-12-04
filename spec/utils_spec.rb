@@ -64,28 +64,10 @@ RSpec.describe Rails::Instrumentation::Utils do
     before { described_class.tag_error(span, payload) }
 
     it 'adds error tags and logs to the span' do
+      expect(span.logs).to be_empty
       expect(span.tags['error']).to be true
-
-      kind_log = {
-        key: 'error.kind',
-        value: 'Exception',
-        timestamp: anything
-      }
-      expect(span.logs).to include kind_log
-
-      message_log = {
-        key: 'message',
-        value: 'message',
-        timestamp: anything
-      }
-      expect(span.logs).to include message_log
-
-      object_log = {
-        key: 'error.object',
-        value: exception,
-        timestamp: anything
-      }
-      expect(span.logs).to include object_log
+      expect(span.tags['sfx.error.kind']).to eq 'Exception'
+      expect(span.tags['sfx.error.message']).to eq 'error_message'
     end
   end
 end

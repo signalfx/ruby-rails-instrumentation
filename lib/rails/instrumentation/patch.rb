@@ -13,12 +13,10 @@ module Rails
 
             # skip adding tags here. Getting the complete set of information is
             # easiest in the notification
-
             process_action_original(method_name, *args)
           rescue Error => error
             if scope
-              scope.span.set_tag('error', true)
-              scope.span.log_kv(key: 'message', value: error.message)
+              scope.span.record_exception(error)
             end
 
             raise

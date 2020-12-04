@@ -12,7 +12,7 @@ currently instrumented by ActiveSupport are available to trace.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rails-instrumentation'
+gem 'signalfx-rails-instrumentation'
 ```
 
 And then execute:
@@ -21,7 +21,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install rails-instrumentation
+    $ gem install signalfx-rails-instrumentation
 
 ## Usage
 

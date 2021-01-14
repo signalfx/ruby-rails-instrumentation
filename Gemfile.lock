@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    signalfx-rails-instrumentation (0.2.0)
+    signalfx-rails-instrumentation (0.2.1)
       opentracing (~> 0.3)
 
 GEM
@@ -156,7 +156,7 @@ GEM
     websocket-extensions (0.1.5)
 
 PLATFORMS
-  ruby
+  x86_64-darwin-19
 
 DEPENDENCIES
   appraisal (~> 2.2)
@@ -170,4 +170,4 @@ DEPENDENCIES
   signalfx_test_tracer (>= 0.1.2)
 
 BUNDLED WITH
-   2.1.4
+   2.2.5

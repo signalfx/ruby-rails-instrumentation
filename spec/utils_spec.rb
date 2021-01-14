@@ -70,4 +70,19 @@ RSpec.describe Rails::Instrumentation::Utils do
       expect(span.tags['sfx.error.message']).to eq 'error_message'
     end
   end
+
+  describe 'tag_error_without_exception' do
+    let(:tracer) { OpenTracingTestTracer.build }
+    let(:span) { tracer.start_span('test_span', tags: {}) }
+    let(:payload) { { exception: ['ExceptionType', 'exception message']} }
+
+    before { described_class.tag_error(span, payload) }
+
+    it 'adds error tags and logs to the span without exception' do
+      expect(span.logs).to be_empty
+      expect(span.tags['error']).to be true
+      expect(span.tags['sfx.error.kind']).to eq 'ExceptionType'
+      expect(span.tags['sfx.error.message']).to eq 'exception message'
+    end
+  end
 end

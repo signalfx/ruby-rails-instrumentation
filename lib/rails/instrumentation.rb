@@ -23,10 +23,14 @@ module Rails
     }.freeze
 
     def self.instrument(tracer: OpenTracing.global_tracer,
-                        exclude_events: [])
+                        exclude_events: [],
+                        custom_subscribers: nil)
       @tracer = tracer
 
       add_subscribers(exclude_events: exclude_events)
+
+      custom_subscribers&.call(exclude_events: exclude_events)
+
       Patch.patch_process_action
     end
 

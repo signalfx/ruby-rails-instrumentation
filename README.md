@@ -1,3 +1,8 @@
+>ℹ️&nbsp;&nbsp;SignalFx was acquired by Splunk in October 2019. See [Splunk SignalFx](https://www.splunk.com/en_us/investor-relations/acquisitions/signalfx.html) for more information.
+
+> # :warning: Deprecation Notice
+> **The Rails::Instrumentation is deprecated and will reach End of Support on Jun 30, 2026. After that date, this repository will be archived and no longer receive updates. Until then, only critical security fixes and bug fixes will be provided.**
+
 # Rails::Instrumentation
 
 OpenTracing instrumentation for Rails using ActiveSupport notifications. All events
